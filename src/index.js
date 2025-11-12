@@ -2,13 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import '@fontsource/quicksand';
+import '@fontsource/karla';
+import "@fontsource/delius";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router';
+import { myStore } from './Comp/Reduxcart/Store';
+import {Provider} from 'react-redux'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <Provider store={myStore}>
+    <BrowserRouter>
     <App />
-  </React.StrictMode>
+  </BrowserRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
