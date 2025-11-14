@@ -19,14 +19,34 @@ const Productinfo = () => {
 
   useEffect(() => {
     fetchapi();
-  }, [category, id]);
+  }, [category, id])
 
   async function fetchapi() {
-    const info = await axios.get(`http://localhost:3000/${category}/${id}`);
-    const detail = await axios.get(`http://localhost:3000/${category}`);
-    setState(info.data);
-    setRelated(detail.data);
+    try {
+      // 1. Read complete db.json
+      const res = await axios.get("/db.json");
+      const data = res.data;
+
+      // 2. Get category array
+      const key = category;                      // e.g. "Kurta Set"
+      const categoryArray = data[key] || [];     // All items of category
+
+      // 3. Find product with matching ID
+      const product = categoryArray.find((el) => String(el.id) === String(id));
+
+      setState(product || {});
+      setRelated(categoryArray); // all products of same category
+    } catch (error) {
+      console.log("Error loading product:", error);
+    }
   }
+
+  // async function fetchapi() {
+  //   const info = await axios.get(`http://localhost:3000/${category}/${id}`);
+  //   const detail = await axios.get(`http://localhost:3000/${category}`);
+  //   setState(info.data);
+  //   setRelated(detail.data);
+  // }
 
   const filtercategory = related.filter(
     (itm) => itm.category === state.category && itm.id !== state.id

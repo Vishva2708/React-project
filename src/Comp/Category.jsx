@@ -9,16 +9,20 @@ const Category = () => {
   const [sort, setSort] = useState("default");
   const { category } = useParams();
 
-  useEffect(() => {
-    async function fetchapi() {
+ useEffect(() => {
+    const fetchData = async () => {
       try {
-        const info = await axios.get(`http://localhost:3000/${category}`);
-        setState(info.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+        const res = await axios.get("/db.json"); 
+        const data = res.data;
+        const key = category; 
+        const arr = data[key]; 
+         setState(arr || []);
+        } catch (err) {
+          console.error("Fetch error:", err);
+          setState([]);
       }
-    }
-    fetchapi();
+    };
+    fetchData();
   }, [category]);
 
   // Get unique colors (using "specification" from your JSON)
